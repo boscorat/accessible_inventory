@@ -88,7 +88,7 @@ def update_entity(
     description_plural,
     base_hierarchy_level,
 ):
-    sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', base_hierarchy_level = '{base_hierarchy_level}' WHERE entity_key = '{entity_key}'"
+    sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', hierarchy_level = '{base_hierarchy_level}' WHERE entity_key = '{entity_key}'"
     connection = sqlite3.connect(DATABASE)
     connection.execute(sql)
     connection.commit()

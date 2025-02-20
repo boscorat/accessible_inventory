@@ -1,0 +1,99 @@
+INFO:entities:Entity created successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: 70fa81ef-1907-4bac-a02b-c8d6b4640862
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Cannot delete as entity has inventory
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Cannot delete as entity has inventory
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Cannot delete as entity has inventory
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Cannot delete as entity has inventory
+INFO:entities:Entity deleted successfully
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: 9216a1e5-4551-4d31-b6a9-02adee9035e9
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: 9ee7afd5-e984-4c8d-a808-1e95e979ba3d
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: 2e975f97-8002-4b9b-b98f-9897824ff1ea
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: 4827373a-3f71-41ff-aa75-f1300d847c8f
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Cannot delete as entity has inventory
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Cannot delete as entity has inventory
+INFO:entities:Entity deleted successfully

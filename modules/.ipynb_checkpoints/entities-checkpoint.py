@@ -4,16 +4,11 @@ import uuid
 
 from exceptions import ItemDeleteHasInventoryError, MasterGPOSError
 from inflex import Noun  # type: ignore
-from sql_inventory import (
-    delete_item,
-    delete_location,
-    insert_item,
-    insert_location,
-    select_inventory,
-    select_item,
-    select_location,
-    update_item,
-    update_location,
+from sql import (
+    delete_entity,
+    insert_entity,
+    update_entity,
+    select_entity,
 )
 
 logger = logging.getLogger(__name__)
@@ -292,10 +287,3 @@ class Entity:
             return Noun(noun).singular()
         else:
             return [word for word in words if word != noun]
-
-
-item = Entity(description="a lovely piglet", entity_type="item")
-print(item)
-print(select_item(item.key))
-print(item.get_db_id())
-print(item.exists)

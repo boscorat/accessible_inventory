@@ -14,9 +14,5 @@ class InventoryRemoveExcessiveError(Exception):
     pass
 
 
-class ItemDeleteHasInventoryError(Exception):
-    pass
-
-
-class LocationDeleteHasInventoryError(Exception):
+class EntityDeleteHasInventoryError(Exception):
     pass

@@ -1,0 +1,20 @@
+INFO:entities:Entity created successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+ERROR:entities:Error updating entity: no such column: hierarchy_level
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity created successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity updated successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
+INFO:entities:Entity deleted successfully
