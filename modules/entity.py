@@ -64,7 +64,10 @@ class Entity:
     def inventory(self) -> int:
         result = select_inventory(entity_id_child=self.id, fields="quantity")
         if result:
-            return sum(result[0])
+            qty = 0
+            for row in result:
+                qty += dict(row)["quantity"]
+            return qty
         else:
             return 0
 

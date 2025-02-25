@@ -97,3 +97,26 @@ INFO:entities:Entity created successfully
 INFO:entities:Entity updated successfully
 INFO:entities:Cannot delete as entity has inventory
 INFO:entities:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
