@@ -34,7 +34,7 @@ def drop_table(table_name):
 
 
 def create_table_entity(
-    query="CREATE TABLE IF NOT EXISTS entity_sql (entity_id varchar(60) NOT NULL, entity_key VARCHAR(100) PRIMARY KEY NOT NULL, noun VARCHAR(50) NOT NULL, adjectives VARCHAR(255), description_singular VARCHAR(350) NOT NULL, description_plural VARCHAR(350) NOT NULL, base_hierarchy_level INT NULL, UNIQUE (entity_id))",
+    query="CREATE TABLE IF NOT EXISTS entity_sql (entity_id varchar(60) NOT NULL, entity_id_parent varchar(60) NULL, entity_key VARCHAR(100) PRIMARY KEY NOT NULL, noun VARCHAR(50) NOT NULL, adjectives VARCHAR(255), description_singular VARCHAR(350) NOT NULL, description_plural VARCHAR(350) NOT NULL, base_hierarchy_level INT NULL, UNIQUE (entity_id))",
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(query)
@@ -57,10 +57,11 @@ def insert_entity(
     description_singular,
     description_plural,
     base_hierarchy_level=0,
+    entity_id_parent=None,
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(
-        f"INSERT INTO entity_sql (entity_id, entity_key, noun, adjectives, description_singular, description_plural, base_hierarchy_level) VALUES ('{entity_id}', '{entity_key}', '{noun}', '{adjectives}', '{description_singular}', '{description_plural}', '{base_hierarchy_level}')"
+        f"INSERT INTO entity_sql (entity_id, entity_id_parent, entity_key, noun, adjectives, description_singular, description_plural, base_hierarchy_level) VALUES ('{entity_id}', '{entity_id_parent}', '{entity_key}', '{noun}', '{adjectives}', '{description_singular}', '{description_plural}', '{base_hierarchy_level}')"
     )
     connection.commit()
     connection.close()
@@ -73,23 +74,24 @@ def insert_inventory(
     entity_id_child,
     quantity,
     position="IN",
+    hierarchy_level=0,
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(
-        f"INSERT INTO inventory_sql (inventory_id, inventory_id_parent, entity_id_parent, entity_id_child, quantity, position) VALUES ('{inventory_id}', '{inventory_id_parent}', '{entity_id_parent}', '{entity_id_child}', {quantity}, '{position}')"
+        f"INSERT INTO inventory_sql (inventory_id, inventory_id_parent, entity_id_parent, entity_id_child, quantity, position, hierarchy_level) VALUES ('{inventory_id}', '{inventory_id_parent}', '{entity_id_parent}', '{entity_id_child}', {quantity}, '{position}', {hierarchy_level})"
     )
     connection.commit()
     connection.close()
 
 
 def update_entity(
-    entity_key,
+    entity_id,
     adjectives,
     description_singular,
     description_plural,
     base_hierarchy_level,
 ):
-    sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', base_hierarchy_level = '{base_hierarchy_level}' WHERE entity_key = '{entity_key}'"
+    sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', base_hierarchy_level = '{base_hierarchy_level}' WHERE entity_id = '{entity_id}'"
     connection = sqlite3.connect(DATABASE)
     connection.execute(sql)
     connection.commit()
@@ -112,8 +114,8 @@ def update_inventory_hierarchy(inventory_id, hierarchy_level):
     connection.close()
 
 
-def delete_entity(entity_key):
-    sql = f"DELETE FROM entity_sql WHERE entity_key = '{entity_key}'"
+def delete_entity(entity_id):
+    sql = f"DELETE FROM entity_sql WHERE entity_id = '{entity_id}'"
     connection = sqlite3.connect(DATABASE)
     connection.execute(
         "PRAGMA foreign_keys=ON"
@@ -134,20 +136,25 @@ def delete_inventory(inventory_id):
     connection.close()
 
 
-def select_entity(entity_key=None, base_hierarchy_level=None, fields="*"):
-    if not entity_key and not base_hierarchy_level:
-        sql = f"SELECT {fields} FROM entity_sql"
-    elif not entity_key:
+def select_entity(
+    entity_id=None, entity_key=None, base_hierarchy_level=None, fields="*"
+):
+    if entity_id:
+        sql = f"SELECT {fields} FROM entity_sql WHERE entity_id = '{entity_id}'"
+    elif entity_key:
+        sql = f"SELECT {fields} FROM entity_sql WHERE entity_key = '{entity_key}'"
+    elif base_hierarchy_level:
         sql = f"SELECT {fields} FROM entity_sql WHERE base_hierarchy_level = '{base_hierarchy_level}'"
     else:
-        sql = f"SELECT {fields} FROM entity_sql WHERE entity_key = '{entity_key}'"
+        sql = f"SELECT {fields} FROM entity_sql"
     connection = sqlite3.connect(DATABASE)
+    connection.row_factory = sqlite3.Row
     cursor_obj = connection.cursor()
     cursor_obj.execute(sql)
-    if not entity_key:
-        output = cursor_obj.fetchall()
-    else:
+    if entity_id or entity_key:
         output = cursor_obj.fetchone()
+    else:
+        output = cursor_obj.fetchall()
     connection.commit()
     connection.close()
     return output

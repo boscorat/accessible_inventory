@@ -1,2 +1,5 @@
 ERROR:__main__:Error updating entity: no such column: hierarchy_level
 ERROR:__main__:Error updating entity: no such column: hierarchy_level
+INFO:__main__:Entity created successfully
+INFO:__main__:Entity updated successfully
+INFO:__main__:Entity deleted successfully

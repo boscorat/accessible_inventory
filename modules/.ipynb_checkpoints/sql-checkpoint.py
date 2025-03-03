@@ -34,7 +34,7 @@ def drop_table(table_name):
 
 
 def create_table_entity(
-    query="CREATE TABLE IF NOT EXISTS entity_sql (entity_id varchar(60) NOT NULL, entity_key VARCHAR(100) PRIMARY KEY NOT NULL, noun VARCHAR(50) NOT NULL, adjectives VARCHAR(255), description_singular VARCHAR(350) NOT NULL, description_plural VARCHAR(350) NOT NULL, base_hierarchy_level INT NULL, UNIQUE (entity_id))",
+    query="CREATE TABLE IF NOT EXISTS entity_sql (entity_id varchar(60) NOT NULL, entity_id_parent varchar(60) NULL, entity_key VARCHAR(100) PRIMARY KEY NOT NULL, noun VARCHAR(50) NOT NULL, adjectives VARCHAR(255), description_singular VARCHAR(350) NOT NULL, description_plural VARCHAR(350) NOT NULL, base_hierarchy_level INT NULL, UNIQUE (entity_id))",
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(query)
@@ -42,7 +42,7 @@ def create_table_entity(
 
 
 def create_table_inventory(
-    query="CREATE TABLE IF NOT EXISTS inventory_sql (inventory_id varchar(60) NOT NULL, inventory_id_parent varchar(60) NOT NULL REFERENCES inventory_sql(inventory_id), entity_id_parent varchar(60) NOT NULL REFERENCES entity_sql(entity_id) ON DELETE CASCADE, entity_id_child VARCHAR(60) NOT NULL REFERENCES entity_sql(entity_id) ON DELETE CASCADE, quantity INTEGER NOT NULL DEFAULT(0), hierarchy_level INT NULL, created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (entity_id_parent, entity_id_child), UNIQUE (inventory_id))",
+    query="CREATE TABLE IF NOT EXISTS inventory_sql (inventory_id VARCHAR(60) NOT NULL, inventory_id_parent VARCHAR(60) NOT NULL REFERENCES inventory_sql(inventory_id), entity_id_parent VARCHAR(60) NOT NULL REFERENCES entity_sql(entity_id) ON DELETE CASCADE, entity_id_child VARCHAR(60) NOT NULL REFERENCES entity_sql(entity_id) ON DELETE CASCADE, quantity INTEGER NOT NULL DEFAULT(0), position VARCHAR(25) DEFAULT('IN'), hierarchy_level INT NULL, created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (entity_id_parent, entity_id_child, position), UNIQUE (inventory_id))",
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(query)
@@ -56,11 +56,12 @@ def insert_entity(
     adjectives,
     description_singular,
     description_plural,
-    base_hierarchy_level,
+    base_hierarchy_level=0,
+    entity_id_parent = None,
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(
-        f"INSERT INTO entity_sql (entity_id, entity_key, noun, adjectives, description_singular, description_plural, base_hierarchy_level) VALUES ('{entity_id}', '{entity_key}', '{noun}', '{adjectives}', '{description_singular}', '{description_plural}', '{base_hierarchy_level}')"
+        f"INSERT INTO entity_sql (entity_id, entity_id_parent, entity_key, noun, adjectives, description_singular, description_plural, base_hierarchy_level) VALUES ('{entity_id}', '{entity_id_parent}', '{entity_key}', '{noun}', '{adjectives}', '{description_singular}', '{description_plural}', '{base_hierarchy_level}')"
     )
     connection.commit()
     connection.close()
@@ -72,10 +73,11 @@ def insert_inventory(
     entity_id_parent,
     entity_id_child,
     quantity,
+    position="IN",
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(
-        f"INSERT INTO inventory_sql (inventory_id, inventory_id_parent, entity_id_parent, entity_id_child, quantity) VALUES ('{inventory_id}', '{inventory_id_parent}', '{entity_id_parent}', '{entity_id_child}', {quantity})"
+        f"INSERT INTO inventory_sql (inventory_id, inventory_id_parent, entity_id_parent, entity_id_child, quantity, position) VALUES ('{inventory_id}', '{inventory_id_parent}', '{entity_id_parent}', '{entity_id_child}', {quantity}, '{position}')"
     )
     connection.commit()
     connection.close()
@@ -88,15 +90,15 @@ def update_entity(
     description_plural,
     base_hierarchy_level,
 ):
-    sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', hierarchy_level = '{base_hierarchy_level}' WHERE entity_key = '{entity_key}'"
+    sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', base_hierarchy_level = '{base_hierarchy_level}' WHERE entity_key = '{entity_key}'"
     connection = sqlite3.connect(DATABASE)
     connection.execute(sql)
     connection.commit()
     connection.close()
 
 
-def update_inventory(entity_id_parent, entity_id_child, quantity):
-    sql = f"UPDATE inventory_sql SET quantity = {quantity} WHERE entity_id_parent = '{entity_id_parent}' AND entity_id_child = '{entity_id_child}'"
+def update_inventory(inventory_id, quantity):
+    sql = f"UPDATE inventory_sql SET quantity = {quantity} WHERE inventory_id = '{inventory_id}'"
     connection = sqlite3.connect(DATABASE)
     connection.execute(sql)
     connection.commit()
@@ -141,6 +143,7 @@ def select_entity(entity_key=None, base_hierarchy_level=None, fields="*"):
     else:
         sql = f"SELECT {fields} FROM entity_sql WHERE entity_key = '{entity_key}'"
     connection = sqlite3.connect(DATABASE)
+    connection.row_factory = sqlite3.Row
     cursor_obj = connection.cursor()
     cursor_obj.execute(sql)
     if not entity_key:
@@ -153,21 +156,32 @@ def select_entity(entity_key=None, base_hierarchy_level=None, fields="*"):
 
 
 def select_inventory(
-    inventory_id=None, entity_id_parent=None, entity_id_child=None, fields="*"
+    inventory_id=None,
+    entity_id_parent=None,
+    entity_id_child=None,
+    position=None,
+    fields="*",
 ):
     if (
-        not inventory_id and not entity_id_parent and not entity_id_child
+        not inventory_id
+        and not entity_id_parent
+        and not entity_id_child
+        and not position
     ):  # select all if no filters set
         sql = f"SELECT {fields} FROM inventory_sql"
     elif inventory_id:  # select by inventory_id as this is unique
         sql = (
             f"SELECT {fields} FROM inventory_sql WHERE inventory_id = '{inventory_id}'"
         )
-    elif entity_id_parent and entity_id_child:
+    elif (
+        entity_id_parent and entity_id_child and position
+    ):  # select by parent, child and position
+        sql = f"SELECT {fields} FROM inventory_sql WHERE entity_id_parent = '{entity_id_parent}' AND entity_id_child = '{entity_id_child}' AND position = '{position}'"
+    elif entity_id_parent and entity_id_child:  # select by parent and child
         sql = f"SELECT {fields} FROM inventory_sql WHERE entity_id_parent = '{entity_id_parent}' AND entity_id_child = '{entity_id_child}'"
-    elif entity_id_parent:
+    elif entity_id_parent:  # select by parent
         sql = f"SELECT {fields} FROM inventory_sql WHERE entity_id_parent = '{entity_id_parent}'"
-    elif entity_id_child:
+    elif entity_id_child:  # select by child
         sql = f"SELECT {fields} FROM inventory_sql WHERE entity_id_child = '{entity_id_child}'"
     connection = sqlite3.connect(DATABASE)
     connection.row_factory = sqlite3.Row

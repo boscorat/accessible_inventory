@@ -120,3 +120,254 @@ INFO:venv:There are no yellow chairs in lounge to remove
 INFO:venv:Inventory created successfully
 INFO:venv:Inventory deleted successfully
 INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory updated successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+ERROR:entity:Error creating entity: table entity_sql has no column named entity_id_parent
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity deleted successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity does not exist
+INFO:entity:Entity does not exist
+INFO:entity:Entity does not exist
+INFO:entity:Entity updated successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity deleted successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity does not exist
+INFO:entity:Entity does not exist
+INFO:entity:Entity updated successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity deleted successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity does not exist
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: b47bd327-ec36-4b4c-a00c-f5cf9e7b6d32
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity does not exist
+INFO:entity:Entity does not exist
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity created successfully
+INFO:entity:Entity does not exist
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity does not exist
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity does not exist
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: b2eea81a-0fcc-4639-90d0-f6cf08bb9dad
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity deleted successfully
+ERROR:ipykernel.comm:No such comm target registered: jupyter.widget.control
+WARNING:Comm:No such comm: 21d1b464-f56e-4362-8f81-ba59b04a22dd
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:venv:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory created successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+ERROR:venv:Error creating inventory: UNIQUE constraint failed: inventory_sql.entity_id_parent, inventory_sql.entity_id_child, inventory_sql.position
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory updated successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:venv:Inventory created successfully
+INFO:venv:Inventory created successfully
+INFO:venv:There are not enough yellow chairs in lounge to remove
+INFO:venv:Inventory deleted successfully
+INFO:venv:There are no yellow chairs in lounge to remove
+INFO:venv:Inventory updated successfully
+INFO:entity:Entity created successfully

@@ -7,11 +7,42 @@ from sql import delete_inventory, insert_inventory, select_inventory, update_inv
 
 
 class Inventory:
-    def __init__(self, entity_parent, entity_child, quantity, position="IN"):
+    def __init__(
+        self,
+        entity_parent,
+        entity_child,
+        quantity,
+        action="ADD",  # can be ADD or REMOVE
+        position="IN",  # can be IN, ON, UNDER, BEHIND
+        inventory_id=None,  # can be specified if the inventory already exists
+        inventory_id_parent=None,  # can be specified if the parent inventory is known
+    ):
         self.entity_parent = entity_parent
         self.entity_child = entity_child
         self.quantity = quantity
+        self.action = action
         self.position = position
+
+        def _initialize_current_inventory():
+            if inventory_id:
+                inv = select_inventory(
+                    inventory_id=inventory_id, fields="[quantity],[inventory_id_parent]"
+                )
+                if inv:
+                    self.id = inventory_id
+                    self.new_quantity = inv[0]
+                    self.inventory_id_parent = inv[1]
+                    self._exists = True
+                else:
+                    raise ValueError("Invalid inventory_id provided")
+            else:
+                inv = select_inventory(
+                    entity_id_parent=self.entity_parent,
+                    entity_id_child=self.entity_child,
+                    position=self.position,
+                    fields="[quantity],[inventory_id_parent]",
+                )
+
         if not self.exists:
             if self.quantity > 0:
                 self.new_quantity = self.quantity
@@ -19,10 +50,10 @@ class Inventory:
                 self.create_new()
             else:
                 logger.info(
-                    f"There are no {self.entity_child.plural} in {self.entity_parent.description} to remove"
+                    f"There are no {self.entity_child._plural} in {self.entity_parent.description} to remove"
                 )
                 raise InventoryRemoveZeroError(
-                    f"There are no {self.entity_child.plural} in {self.entity_parent.description} to remove"
+                    f"There are no {self.entity_child._plural} in {self.entity_parent.description} to remove"
                 )
         else:
             self.id = self._get_inventory_id()
@@ -39,33 +70,27 @@ class Inventory:
                     self.entity_child.delete_existing()
             else:  # new_quantity < 0
                 logger.info(
-                    f"There are not enough {self.entity_child.plural} in {self.entity_parent.description} to remove"
+                    f"There are not enough {self.entity_child._plural} in {self.entity_parent.description} to remove"
                 )
                 raise InventoryRemoveExcessiveError(
-                    f"There are not enough {self.entity_child.plural} in {self.entity_parent.description} to remove"
+                    f"There are not enough {self.entity_child._plural} in {self.entity_parent.description} to remove"
                 )
 
     def __str__(self):
         if self.new_quantity > 0:
-            return f"{self.new_quantity} {self.entity_child.plural if self.quantity > 1 else self.entity_child.singular} {self.position.lower()} {self.entity_parent.description}"
+            return f"{self.new_quantity} {self.entity_child._plural if self.quantity > 1 else self.entity_child._singular} ({self.entity_child.id}) {self.position.lower()} {self.entity_parent.description} ({self.entity_parent.id})"
         else:
-            return f"No {self.entity_child.plural} {self.position.lower()} {self.entity_parent.description}"
+            return f"No {self.entity_child._plural} {self.position.lower()} {self.entity_parent.description}"
 
     @property
-    def entity_parent(self):
-        return self._entity_parent
+    def action(self):
+        return self._action
 
-    @entity_parent.setter
-    def entity_parent(self, value):
-        self._entity_parent = value
-
-    @property
-    def entity_child(self):
-        return self._entity_child
-
-    @entity_child.setter
-    def entity_child(self, value):
-        self._entity_child = value
+    @action.setter
+    def action(self, value):
+        if value not in ["ADD", "REMOVE"]:
+            raise ValueError("Action must be ADD or REMOVE")
+        self._action = value
 
     @property
     def position(self):
@@ -83,7 +108,10 @@ class Inventory:
 
     @quantity.setter
     def quantity(self, value):
-        self._quantity = value
+        if not isinstance(value, int) or not value > 0:
+            raise ValueError("Quantity must be an integer greater than 0")
+        else:  # value is an integer greater than 0
+            self._quantity = value
 
     @staticmethod
     def show_all(anchor: str = "item"):  # can be item or class
@@ -102,14 +130,22 @@ class Inventory:
     def create_new(self):
         if not self.exists:
             try:
-                id_parent = self.get_parent()
+                if (
+                    not self.entity_parent.base_hierarchy_level
+                    or self.entity_parent.base_hierarchy_level != 1
+                ):
+                    inventory_id_parent, parent_hierarchy = self.get_parent()
+                else:
+                    inventory_id_parent = None
+                    parent_hierarchy = 0
                 insert_inventory(
                     inventory_id=self.id,
-                    inventory_id_parent=id_parent,
+                    inventory_id_parent=inventory_id_parent,
                     entity_id_parent=self.entity_parent.id,
                     entity_id_child=self.entity_child.id,
                     quantity=self.quantity,
                     position=self.position,
+                    hierarchy_level=parent_hierarchy + 1,
                 )
                 logger.info("Inventory created successfully")
             except sqlite3.Error as e:
@@ -120,7 +156,7 @@ class Inventory:
     def get_parent(self):
         all_parents = select_inventory(
             entity_id_child=self.entity_parent.id,
-            fields="inventory_id, position, quantity",
+            fields="inventory_id, position, quantity, hierarchy_level",
         )
         filtered_parents = [
             dict(parent)
@@ -128,7 +164,10 @@ class Inventory:
             if dict(parent)["position"] == "IN" and dict(parent)["quantity"] == 1
         ]
         if len(filtered_parents) == 1:
-            return filtered_parents[0]["inventory_id"]
+            return (
+                filtered_parents[0]["inventory_id"],
+                filtered_parents[0]["hierarchy_level"],
+            )
         else:
             choice = [parent for parent in filtered_parents]
             print(choice)
@@ -170,3 +209,11 @@ class Inventory:
             entity_id_child=self.entity_child.id,
             fields="quantity",
         )[0]
+
+
+# inventory = Inventory(
+#     entity_parent=Entity(description="Lounge"),
+#     entity_child=Entity(description="Yellow Chair"),
+#     quantity=4,
+# )
+# print(inventory)
