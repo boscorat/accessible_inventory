@@ -371,3 +371,169 @@ INFO:venv:Inventory deleted successfully
 INFO:venv:There are no yellow chairs in lounge to remove
 INFO:venv:Inventory updated successfully
 INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+ERROR:inventory:Error creating inventory: UNIQUE constraint failed: inventory_sql.inventory_id
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory updated successfully
+INFO:inventory:Inventory updated successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity updated successfully
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully
+INFO:entity:Entity created successfully
+ERROR:inventory:Error creating inventory: FOREIGN KEY constraint failed
+ERROR:entity:Error creating entity: database is locked
+ERROR:inventory:Error creating inventory: FOREIGN KEY constraint failed

@@ -34,7 +34,7 @@ def drop_table(table_name):
 
 
 def create_table_entity(
-    query="CREATE TABLE IF NOT EXISTS entity_sql (entity_id varchar(60) NOT NULL, entity_id_parent varchar(60) NULL, entity_key VARCHAR(100) PRIMARY KEY NOT NULL, noun VARCHAR(50) NOT NULL, adjectives VARCHAR(255), description_singular VARCHAR(350) NOT NULL, description_plural VARCHAR(350) NOT NULL, base_hierarchy_level INT NULL, UNIQUE (entity_id))",
+    query="CREATE TABLE IF NOT EXISTS entity_sql (entity_id varchar(60) NOT NULL, entity_id_parent varchar(60) NULL, entity_key VARCHAR(100) PRIMARY KEY NOT NULL, noun VARCHAR(50) NOT NULL, adjectives VARCHAR(255), description_singular VARCHAR(350) NOT NULL, description_plural VARCHAR(350) NOT NULL, base_hierarchy_level INT NULL, created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE (entity_id))",
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(query)
@@ -61,6 +61,9 @@ def insert_entity(
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(
+        "PRAGMA foreign_keys=ON"
+    )  # enable foreign key constraints so that the delete operation cascades to the inventory table
+    connection.execute(
         f"INSERT INTO entity_sql (entity_id, entity_id_parent, entity_key, noun, adjectives, description_singular, description_plural, base_hierarchy_level) VALUES ('{entity_id}', '{entity_id_parent}', '{entity_key}', '{noun}', '{adjectives}', '{description_singular}', '{description_plural}', '{base_hierarchy_level}')"
     )
     connection.commit()
@@ -78,6 +81,9 @@ def insert_inventory(
 ):
     connection = sqlite3.connect(DATABASE)
     connection.execute(
+        "PRAGMA foreign_keys=ON"
+    )  # enable foreign key constraints so that the delete operation cascades to the inventory table
+    connection.execute(
         f"INSERT INTO inventory_sql (inventory_id, inventory_id_parent, entity_id_parent, entity_id_child, quantity, position, hierarchy_level) VALUES ('{inventory_id}', '{inventory_id_parent}', '{entity_id_parent}', '{entity_id_child}', {quantity}, '{position}', {hierarchy_level})"
     )
     connection.commit()
@@ -93,6 +99,9 @@ def update_entity(
 ):
     sql = f"UPDATE entity_sql SET adjectives = '{adjectives}', description_singular = '{description_singular}', description_plural = '{description_plural}', base_hierarchy_level = '{base_hierarchy_level}' WHERE entity_id = '{entity_id}'"
     connection = sqlite3.connect(DATABASE)
+    connection.execute(
+        "PRAGMA foreign_keys=ON"
+    )  # enable foreign key constraints so that the delete operation cascades to the inventory table
     connection.execute(sql)
     connection.commit()
     connection.close()
@@ -101,6 +110,9 @@ def update_entity(
 def update_inventory(inventory_id, quantity):
     sql = f"UPDATE inventory_sql SET quantity = {quantity} WHERE inventory_id = '{inventory_id}'"
     connection = sqlite3.connect(DATABASE)
+    connection.execute(
+        "PRAGMA foreign_keys=ON"
+    )  # enable foreign key constraints so that the delete operation cascades to the inventory table
     connection.execute(sql)
     connection.commit()
     connection.close()
@@ -109,6 +121,9 @@ def update_inventory(inventory_id, quantity):
 def update_inventory_hierarchy(inventory_id, hierarchy_level):
     sql = f"UPDATE inventory_sql SET hierarchy_level = {hierarchy_level} WHERE inventory_id = '{inventory_id}'"
     connection = sqlite3.connect(DATABASE)
+    connection.execute(
+        "PRAGMA foreign_keys=ON"
+    )  # enable foreign key constraints so that the delete operation cascades to the inventory table
     connection.execute(sql)
     connection.commit()
     connection.close()

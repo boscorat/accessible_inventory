@@ -24,10 +24,15 @@ configure_logging()
 
 class Entity:
     def __init__(
-        self, description: str = "", base_hierarchy_level: int = 0, id: str = None
+        self,
+        description: str = "",
+        base_hierarchy_level: int = 0,
+        id: str = None,
+        id_parent: str = None,
     ) -> None:
         self.description = description
         self.base_hierarchy_level = base_hierarchy_level
+        self.id_parent = id_parent
         self._initialize_parts_of_speech()
         self._id_db = self.get_db_id()
         if id:  # if an id is provided, use it
@@ -61,11 +66,11 @@ class Entity:
         self._singular_caps = self._singular.capitalize()
         self._plural_title = self._plural.title()
         self._singular_title = self._singular.title()
-        # correction for fixed level entities, as these will never have a plural form
+        # correction for fixed level entities, as they could be a fixed plural or singular and should reflect the description
         if self.base_hierarchy_level != 0:
-            self._plural = self._singular
-            self._plural_caps = self._singular_caps
-            self._plural_title = self._singular
+            self._plural = self.description
+            self._plural_caps = self.description.capitalize()
+            self._plural_title = self.description.title()
 
     def _database_update(self) -> None:
         if not self._exists:
@@ -101,6 +106,7 @@ class Entity:
                     description_singular=self._singular,
                     description_plural=self._plural,
                     base_hierarchy_level=self.base_hierarchy_level,
+                    entity_id_parent=self.id_parent,
                 )
                 logger.info("Entity created successfully")
                 return True
