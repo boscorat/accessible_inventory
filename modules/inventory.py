@@ -2,11 +2,20 @@ import logging
 import sqlite3
 from uuid import uuid4
 
-from entity import Entity
+import duckdb as dd
+from duck import DuckConnect, sql_inventory
 from exception import InventoryRemoveExcessiveError, InventoryRemoveZeroError
 from sql import delete_inventory, insert_inventory, select_inventory, update_inventory
 
 logger = logging.getLogger(__name__)
+DuckConnect()
+
+
+def configure_logging():
+    logging.basicConfig(filename="event.log", level=logging.INFO)
+
+
+configure_logging()
 
 
 class Inventory:
@@ -73,8 +82,8 @@ class Inventory:
                 raise ValueError("Invalid inventory_id provided")
         else:
             inv = select_inventory(  # if no inventory_id is provided we lookup the parent and child entities to get the current inventory
-                entity_id_parent=self.entity_parent.id,
-                entity_id_child=self.entity_child.id,
+                entity_id_parent=self.entity_parent.entity_id,
+                entity_id_child=self.entity_child.entity_id,
                 position=self.position,
                 fields="[inventory_id],[quantity],[inventory_id_parent]",
             )
@@ -102,9 +111,10 @@ class Inventory:
         else:
             if self.entity_parent.base_hierarchy_level == 1:
                 self.hierarchy_level = 1
+                self.inventory_id_parent = self.inventory_id  # if the parent is a base entity, the parent inventory is the same as the child inventory
             else:
                 inv = select_inventory(
-                    entity_id_child=self.entity_parent.id,
+                    entity_id_child=self.entity_parent.entity_id,
                     fields="[inventory_id],[hierarchy_level],[quantity]",
                 )
                 if inv and len(inv) == 1:
@@ -115,13 +125,18 @@ class Inventory:
                     else:
                         raise ValueError("Parent inventory must have a quantity of 1")
                 elif inv and len(inv) > 1:
-                    raise ValueError("Multiple parent inventories found")
+                    print("Multiple parent inventories found")
+                    sql_where = (
+                        f"WHERE INV.entity_id_child = '{self.entity_parent.entity_id}'"
+                    )
+                    sql_full = sql_inventory() + sql_where
+                    dd.sql(sql_full).show()
                 else:
                     raise ValueError("No parent inventory found")
 
     def __str__(self):
         if self._quantity_new > 0:
-            return f"{self._quantity_new} {self.entity_child._plural if self._quantity_new > 1 else self.entity_child._singular} ({self.entity_child.id}) {self.position.lower()} {self.entity_parent.description} ({self.entity_parent.id})"
+            return f"{self._quantity_new} {self.entity_child._plural if self._quantity_new > 1 else self.entity_child._singular} ({self.entity_child.entity_id}) {self.position.lower()} {self.entity_parent.description} ({self.entity_parent.entity_id})"
         else:
             return f"No {self.entity_child._plural} {self.position.lower()} {self.entity_parent.description}"
 
@@ -162,8 +177,8 @@ class Inventory:
                 insert_inventory(
                     inventory_id=self.inventory_id,
                     inventory_id_parent=self.inventory_id_parent,
-                    entity_id_parent=self.entity_parent.id,
-                    entity_id_child=self.entity_child.id,
+                    entity_id_parent=self.entity_parent.entity_id,
+                    entity_id_child=self.entity_child.entity_id,
                     quantity=self._quantity_new,
                     position=self.position,
                     hierarchy_level=self.hierarchy_level,
@@ -205,10 +220,3 @@ class Inventory:
         else:
             logger.info("Inventory does not exist")
             print("Inventory does not exist")
-
-
-inventory = Inventory(
-    entity_parent=Entity(description="Stillwaters"),
-    entity_child=Entity(description="Dungeon"),
-    quantity=1,
-)

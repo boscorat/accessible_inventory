@@ -1,6 +1,6 @@
 import logging
 import sqlite3
-import uuid
+from uuid import uuid4
 
 from exception import EntityDeleteHasInventoryError, MasterGPOSError
 from inflex import Noun  # type: ignore
@@ -27,33 +27,50 @@ class Entity:
         self,
         description: str = "",
         base_hierarchy_level: int = 0,
-        id: str = None,
-        id_parent: str = None,
+        entity_id: str = None,
+        entity_id_parent: str = None,
     ) -> None:
         self.description = description
         self.base_hierarchy_level = base_hierarchy_level
-        self.id_parent = id_parent
+        self.entity_id = entity_id
+        self.entity_id_parent = entity_id_parent
         self._initialize_parts_of_speech()
-        self._id_db = self.get_db_id()
-        if id:  # if an id is provided, use it
-            self.id = id
-        elif (
-            self._id_db
-        ):  # if the entity already exists in the database, use the existing id
-            self.id = self._id_db
-        else:  # otherwise, generate a new id
-            self.id = uuid.uuid4()
-        self._exists = bool(self._id_db)
+        self._initialize_current_entity()
         self._initialize_forms()
         self._database_update()
 
     def __str__(self) -> str:
-        return f"{self._singular_title} (total inventory: {self.inventory}) ({self.id})"
+        return f"{self._singular_title} (total inventory: {self.inventory}) ({self.entity_id})"
 
     def _initialize_parts_of_speech(self) -> None:
         self._noun = self.get_part_of_speech(speech_part="noun")
         self._adjectives = self.get_part_of_speech(speech_part="adjectives")
         self._key = "_".join(sorted(self._adjectives + [self._noun]))
+
+    def _initialize_current_entity(self) -> None:
+        if self.entity_id:
+            ent = select_entity(entity_id=self.entity_id, fields="*")
+            if ent:
+                ent = dict(ent)
+                self._key = ent["entity_key"]
+                self._db_description = ent["description_singular"]
+                self.base_hierarchy_level = ent["base_hierarchy_level"]
+                self.entity_id_parent = ent["entity_id_parent"]
+                self._exists = True
+            else:
+                self._exists = False
+        else:
+            ent = select_entity(entity_key=self._key, fields="*")
+            if ent:
+                ent = dict(ent)
+                self.entity_id = ent["entity_id"]
+                self._db_description = ent["description_singular"]
+                self.base_hierarchy_level = ent["base_hierarchy_level"]
+                self.entity_id_parent = ent["entity_id_parent"]
+                self._exists = True
+            else:
+                self.entity_id = uuid4()
+                self._exists = False
 
     def _initialize_forms(self) -> None:
         self._plural = str(
@@ -71,19 +88,21 @@ class Entity:
             self._plural = self.description
             self._plural_caps = self.description.capitalize()
             self._plural_title = self.description.title()
+            self._singular = self.description
+            self._singular_caps = self.description.capitalize()
+            self._singular_title = self.description.title()
 
     def _database_update(self) -> None:
         if not self._exists:
             if self.create_new():
                 self._exists = True
         else:
-            db_description = self.get_db_description()
-            if self._singular != db_description:
+            if self._singular != self._db_description:
                 self.update_existing()
 
     @property
     def inventory(self) -> int:
-        result = select_inventory(entity_id_child=self.id, fields="quantity")
+        result = select_inventory(entity_id_child=self.entity_id, fields="quantity")
         if result:
             qty = 0
             for row in result:
@@ -94,28 +113,29 @@ class Entity:
 
     def create_new(self) -> bool:
         """
-        Create a new entity or location in the database.
+        Create a new entity in the database.
         """
         if not self._exists:
             try:
                 insert_entity(
-                    entity_id=self.id,
+                    entity_id=self.entity_id,
                     entity_key=self._key,
                     noun=self._noun,
                     adjectives=" ".join(self._adjectives),
                     description_singular=self._singular,
                     description_plural=self._plural,
                     base_hierarchy_level=self.base_hierarchy_level,
-                    entity_id_parent=self.id_parent,
+                    entity_id_parent=self.entity_id_parent,
                 )
-                logger.info("Entity created successfully")
+                logger.info(f"Entity created successfully: {self}")
+                print(f"Entity created successfully: {self}")
                 return True
             except sqlite3.Error as e:
                 logger.error(f"Error creating entity: {e}")
-                return False
+                raise ValueError(f"Error creating entity: {e}")
         else:
-            logger.info("Entity already exists")
-            return False
+            logger.error("Entity already exists but create_new called")
+            raise ValueError("Entity already exists but create_new called")
 
     def update_existing(self) -> bool:
         """
@@ -124,36 +144,22 @@ class Entity:
         if self._exists:
             try:
                 update_entity(
-                    entity_id=self.id,
+                    entity_id=self.entity_id,
                     adjectives=" ".join(self._adjectives),
                     description_singular=self._singular,
                     description_plural=self._plural,
                     base_hierarchy_level=self.base_hierarchy_level,
                 )
-                logger.info("Entity updated successfully")
+                logger.info(f"Entity updated successfully: {self}")
+                print(f"Entity updated successfully: {self}")
                 return True
             except sqlite3.Error as e:
                 logger.error(f"Error updating entity: {e}")
-                return False
+                raise ValueError(f"Error updating entity: {e}")
         else:
-            logger.info("Entity does not exist")
+            logger.error("Entity does not exist but update_existing called")
+            print("Entity does not exist but update_existing called")
             return False
-
-    def select_existing(self) -> dict | None:
-        """
-        Select an existing entity from the database.
-        """
-        if self._exists:
-            try:
-                entity_sql_row = select_entity(entity_id=self.id)
-                logger.info("Entity selected successfully")
-                return entity_sql_row
-            except sqlite3.Error as e:
-                logger.error(f"Error selecting entity: {e}")
-                return None
-        else:
-            logger.info("Entity does not exist")
-            return None
 
     def delete_existing(self) -> bool:
         """
@@ -161,33 +167,19 @@ class Entity:
         """
         if self._exists and not self.inventory:
             try:
-                delete_entity(entity_id=self.id)
+                delete_entity(entity_id=self.entity_id)
                 logger.info("Entity deleted successfully")
+                print("Entity deleted successfully")
                 return True
             except sqlite3.Error as e:
                 logger.error(f"Error deleting entity: {e}")
-                return False
+                raise ValueError(f"Error deleting entity: {e}")
         elif self.inventory:
             logger.info("Cannot delete as entity has inventory")
             raise EntityDeleteHasInventoryError("Cannot delete as entity has inventory")
-            return False
         else:
-            logger.info("Entity does not exist")
-            return False
-
-    def get_db_id(self) -> str | None:
-        result = select_entity(entity_key=self._key, fields="entity_id")
-        if result:
-            return dict(result)["entity_id"]
-        else:
-            return None  # if the entity does not exist, return None
-
-    def get_db_description(self) -> str | None:
-        result = select_entity(entity_id=self.id, fields="description_singular")
-        if result:
-            return dict(result)["description_singular"]
-        else:
-            return None
+            logger.error("Entity does not exist")
+            raise ValueError("Entity does not exist but delete_existing called")
 
     @property
     def base_hierarchy_level(self):
@@ -195,9 +187,9 @@ class Entity:
 
     @base_hierarchy_level.setter
     def base_hierarchy_level(self, value):
-        if not isinstance(value, int):
+        if not isinstance(value, int) and value > 0:
             raise ValueError(
-                "Invalid hierarchy level. Hierarchy level must be an integer."
+                "Invalid hierarchy level. Hierarchy level must be a positive integer."
             )
         self._base_hierarchy_level = value
 
@@ -216,7 +208,7 @@ class Entity:
             self._description = value.strip().lower()
 
     def get_part_of_speech(self, speech_part) -> list[str] | str:
-        excludes = ("a", "the", "my", "an")
+        excludes = ("a", "the", "my", "an", "this", "that", "these", "those")
         words = [word for word in self.description.split(" ") if word not in excludes]
         if not words:
             raise MasterGPOSError("Description is empty")
