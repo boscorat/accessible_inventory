@@ -730,3 +730,19 @@ INFO:entity:Entity created successfully: World Wont Listen By Smith (total inven
 INFO:inventory:Inventory created successfully
 INFO:inventory:Inventory created successfully
 INFO:entity:Entity created successfully: Sofa (total inventory: 0) (5fa1ab42-27e5-42a4-8170-44cdf6eae6b0)
+INFO:entity:Entity created successfully: Lovely Plump Piglet (total inventory: 0) (1dd566b5-21ba-4f5c-ae90-c1841feab8b5)
+INFO:entity:Entity updated successfully: Plump Lovely Piglet (total inventory: 0) (1dd566b5-21ba-4f5c-ae90-c1841feab8b5)
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory updated successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully: Stillwaters (total inventory: 0) (339cfbbb-f263-41f0-b4dc-5abcfe83e98c)
+INFO:entity:Entity created successfully: Dungeon (total inventory: 0) (9388641c-36bb-42f8-92b5-0d267098e7f1)
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully: Cd Rack (total inventory: 0) (ea4731c1-c66a-49d2-be8c-ceb335ac34f1)
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully: World Wont Listen By Smith (total inventory: 0) (fe214a8b-f45d-40f8-bdbe-36f869685436)
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory created successfully
+INFO:entity:Entity created successfully: Sofa (total inventory: 0) (14b0a5f2-db16-4718-a7ef-76ad28b47ed9)

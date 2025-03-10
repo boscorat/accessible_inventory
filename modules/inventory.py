@@ -100,12 +100,14 @@ class Inventory:
 
     def _initialize_inventory_parent(self):
         if self.inventory_id_parent:
-            inv = select_inventory(
-                inventory_id=self.inventory_id_parent, fields="[hierarchy_level]"
-            )
+            inv = dd.execute(
+                "select hierarchy_level from inventory_sql where inventory_id = ?",
+                [self.inventory_id_parent],
+            ).fetchone()
+            dd.close()
             if inv:
-                inv = dict(inv)
-                self.hierarchy_level = inv["hierarchy_level"] + 1
+                hierarchy_level = inv[0] + 1
+                print(hierarchy_level)
             else:
                 raise ValueError("Invalid inventory_id_parent provided")
         else:
@@ -125,12 +127,9 @@ class Inventory:
                     else:
                         raise ValueError("Parent inventory must have a quantity of 1")
                 elif inv and len(inv) > 1:
-                    print("Multiple parent inventories found")
-                    sql_where = (
-                        f"WHERE INV.entity_id_child = '{self.entity_parent.entity_id}'"
-                    )
-                    sql_full = sql_inventory() + sql_where
-                    dd.sql(sql_full).show()
+                    dd.sql(
+                        sql_inventory(entity_id_child=self.entity_parent.entity_id)
+                    ).show()
                 else:
                     raise ValueError("No parent inventory found")
 
