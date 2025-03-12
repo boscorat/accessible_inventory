@@ -3,3 +3,4 @@ ERROR:__main__:Error updating entity: no such column: hierarchy_level
 INFO:__main__:Entity created successfully
 INFO:__main__:Entity updated successfully
 INFO:__main__:Entity deleted successfully
+INFO:modules.entity:Entity created successfully: Happy Dog (total inventory: 0) (ea527ca1-c948-404c-bda7-920d328dbe84)

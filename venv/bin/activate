@@ -49,7 +49,7 @@ _OLD_VIRTUAL_PATH="$PATH"
 PATH="$VIRTUAL_ENV/"bin":$PATH"
 export PATH
 
-PYTHONPATH="/home/boscorat/repos/accessible_inventory/modules:/home/boscorat/repos/accessible_inventory/tests:/home/boscorat/repos/accessible_inventory/data:$PYTHONPATH"
+PYTHONPATH="/home/boscorat/repos/accessible_inventory/modules:$PYTHONPATH"
 export PYTHONPATH
 
 # unset PYTHONHOME if set

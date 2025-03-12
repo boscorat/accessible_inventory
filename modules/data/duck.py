@@ -1,17 +1,16 @@
 # coonect using duckdb and validate tables
 import duckdb as dd
+from path import PATH_DB
 
-
-class DuckConnect:
-    # Create an in-memory DuckDB connection
-    con = dd.connect(":memory:")
-    try:
-        dd.sql(
-            "ATTACH '/home/boscorat/repos/accessible_inventory/data/inventory.db' AS inventory (TYPE sqlite);"
-        )
-    except Exception as e:
-        print(e)
+con = dd.connect(":memory:")
+try:
+    dd.sql(f"ATTACH '{PATH_DB}' AS inventory (TYPE sqlite);")
+except Exception as e:
+    print(e)
+try:
     dd.sql("USE inventory")
+except Exception as e:
+    print(e)
 
 
 def sql_inventory(
@@ -40,6 +39,8 @@ def sql_inventory(
         where = f"WHERE INV.inventory_id = '{inventory_id}'"
     elif inventory_id_parent:
         where = f"WHERE INV.inventory_id_parent = '{inventory_id_parent}'"
+    elif entity_id_child and entity_id_parent:
+        where = f"WHERE CHI.entity_id = '{entity_id_child}' AND PAR.entity_id = '{entity_id_parent}'"
     elif entity_id_child:
         where = f"WHERE CHI.entity_id = '{entity_id_child}'"
     elif entity_id_parent:

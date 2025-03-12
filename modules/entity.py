@@ -2,15 +2,14 @@ import logging
 import sqlite3
 from uuid import uuid4
 
-from exception import EntityDeleteHasInventoryError, MasterGPOSError
-from inflex import Noun  # type: ignore
-from sql import (
+from data.duck import dd
+from data.sql import (
     delete_entity,
     insert_entity,
-    select_entity,
-    select_inventory,
     update_entity,
 )
+from exception import EntityDeleteHasInventoryError, MasterGPOSError
+from inflex import Noun  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -49,24 +48,34 @@ class Entity:
 
     def _initialize_current_entity(self) -> None:
         if self.entity_id:
-            ent = select_entity(entity_id=self.entity_id, fields="*")
+            ent = (
+                dd.execute(
+                    "select * from entity_sql where entity_id = ?", [self.entity_id]
+                )
+                .df()
+                .to_dict("records")
+            )
             if ent:
-                ent = dict(ent)
-                self._key = ent["entity_key"]
-                self._db_description = ent["description_singular"]
-                self.base_hierarchy_level = ent["base_hierarchy_level"]
-                self.entity_id_parent = ent["entity_id_parent"]
+                # ent = dict(ent)
+                self._key = ent[0]["entity_key"]
+                self._db_description = ent[0]["description_singular"]
+                self.base_hierarchy_level = ent[0]["base_hierarchy_level"]
+                self.entity_id_parent = ent[0]["entity_id_parent"]
                 self._exists = True
             else:
                 self._exists = False
         else:
-            ent = select_entity(entity_key=self._key, fields="*")
+            ent = (
+                dd.execute("select * from entity_sql where entity_key = ?", [self._key])
+                .df()
+                .to_dict("records")
+            )
             if ent:
-                ent = dict(ent)
-                self.entity_id = ent["entity_id"]
-                self._db_description = ent["description_singular"]
-                self.base_hierarchy_level = ent["base_hierarchy_level"]
-                self.entity_id_parent = ent["entity_id_parent"]
+                # ent = dict(ent)
+                self.entity_id = ent[0]["entity_id"]
+                self._db_description = ent[0]["description_singular"]
+                self.base_hierarchy_level = ent[0]["base_hierarchy_level"]
+                self.entity_id_parent = ent[0]["entity_id_parent"]
                 self._exists = True
             else:
                 self.entity_id = uuid4()
@@ -102,11 +111,18 @@ class Entity:
 
     @property
     def inventory(self) -> int:
-        result = select_inventory(entity_id_child=self.entity_id, fields="quantity")
+        result = (
+            dd.execute(
+                "select quantity from inventory_sql where entity_id_child = ?",
+                [self.entity_id],
+            )
+            .df()
+            .to_dict("records")
+        )
         if result:
             qty = 0
             for row in result:
-                qty += dict(row)["quantity"]
+                qty += (row)["quantity"]
             return qty
         else:
             return 0

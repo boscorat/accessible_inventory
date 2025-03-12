@@ -2,13 +2,16 @@ import logging
 import sqlite3
 from uuid import uuid4
 
-import duckdb as dd
-from duck import DuckConnect, sql_inventory
+from data.duck import dd
+from data.sql import (
+    delete_inventory,
+    insert_inventory,
+    update_entity_base_hierarchy_level,
+    update_inventory,
+)
 from exception import InventoryRemoveExcessiveError, InventoryRemoveZeroError
-from sql import delete_inventory, insert_inventory, select_inventory, update_inventory
 
 logger = logging.getLogger(__name__)
-DuckConnect()
 
 
 def configure_logging():
@@ -68,30 +71,40 @@ class Inventory:
             print("No action required")
 
     def _initialize_current_inventory(self):
-        if self.inventory_id:  # if an inventory_id is provided we set details from this
-            inv = select_inventory(
-                inventory_id=self.inventory_id,
-                fields="[quantity],[inventory_id_parent]",
+        if (
+            self.inventory_id
+        ):  # if an inventory_id is provided we set details from this record
+            inventory = (
+                dd.execute(
+                    "select quantity, inventory_id_parent from inventory_sql where inventory_id = ?",
+                    [self.inventory_id],
+                )
+                .df()
+                .to_dict("records")
             )
-            if inv:
-                inv = dict(inv)
-                self.quantity_current = inv["quantity"]
-                self.inventory_id_parent = inv["inventory_id_parent"]
+            if inventory:
+                self.quantity_current = inventory[0]["quantity"]
+                self.inventory_id_parent = inventory[0]["inventory_id_parent"]
                 self._exists = True
             else:
                 raise ValueError("Invalid inventory_id provided")
-        else:
-            inv = select_inventory(  # if no inventory_id is provided we lookup the parent and child entities to get the current inventory
-                entity_id_parent=self.entity_parent.entity_id,
-                entity_id_child=self.entity_child.entity_id,
-                position=self.position,
-                fields="[inventory_id],[quantity],[inventory_id_parent]",
+        else:  # if no inventory_id is provided we look up the inventory record from the entity_id_parent and entity_id_child
+            inventory = (
+                dd.execute(
+                    "select inventory_id, quantity, inventory_id_parent from inventory_sql where entity_id_parent = ? and entity_id_child = ? and position = ?",
+                    [
+                        self.entity_parent.entity_id,
+                        self.entity_child.entity_id,
+                        self.position,
+                    ],
+                )
+                .df()
+                .to_dict("records")
             )
-            if inv:
-                inv = dict(inv)
-                self.inventory_id = inv["inventory_id"]
-                self.quantity_current = inv["quantity"]
-                self.inventory_id_parent = inv["inventory_id_parent"]
+            if inventory:
+                self.inventory_id = inventory[0]["inventory_id"]
+                self.quantity_current = inventory[0]["quantity"]
+                self.inventory_id_parent = inventory[0]["inventory_id_parent"]
                 self._exists = True
             else:
                 self.inventory_id = uuid4()
@@ -100,38 +113,54 @@ class Inventory:
 
     def _initialize_inventory_parent(self):
         if self.inventory_id_parent:
-            inv = dd.execute(
+            parent_record = dd.execute(
                 "select hierarchy_level from inventory_sql where inventory_id = ?",
                 [self.inventory_id_parent],
             ).fetchone()
-            dd.close()
-            if inv:
-                hierarchy_level = inv[0] + 1
-                print(hierarchy_level)
+            if parent_record:
+                self.hierarchy_level = parent_record[0] + 1
             else:
                 raise ValueError("Invalid inventory_id_parent provided")
         else:
-            if self.entity_parent.base_hierarchy_level == 1:
-                self.hierarchy_level = 1
-                self.inventory_id_parent = self.inventory_id  # if the parent is a base entity, the parent inventory is the same as the child inventory
-            else:
-                inv = select_inventory(
-                    entity_id_child=self.entity_parent.entity_id,
-                    fields="[inventory_id],[hierarchy_level],[quantity]",
+            parent_records = (
+                dd.execute(
+                    "select * from inventory_sql where entity_id_child = ?",
+                    [self.entity_parent.entity_id],
                 )
-                if inv and len(inv) == 1:
-                    inv = dict(inv[0])
-                    if inv["quantity"] == 1:
-                        self.inventory_id_parent = inv["inventory_id"]
-                        self.hierarchy_level = inv["hierarchy_level"] + 1
-                    else:
-                        raise ValueError("Parent inventory must have a quantity of 1")
-                elif inv and len(inv) > 1:
-                    dd.sql(
-                        sql_inventory(entity_id_child=self.entity_parent.entity_id)
-                    ).show()
+                .df()
+                .to_dict("records")
+            )
+            if not parent_records:  # if there are no parent inventories, this is the base level and hierarchy_level is 1
+                self.inventory_id_parent = self.inventory_id
+                self.hierarchy_level = 1
+                # the parent entity is the base entity, so we set the base_hierarchy_level to 1
+                update_entity_base_hierarchy_level(
+                    entity_id=self.entity_parent.entity_id, base_hierarchy_level=1
+                )
+            elif len(parent_records) == 1:
+                parent_record = parent_records[0]
+                if parent_record["quantity"] == 1:
+                    self.inventory_id_parent = parent_record["inventory_id"]
+                    self.hierarchy_level = parent_record["hierarchy_level"] + 1
                 else:
-                    raise ValueError("No parent inventory found")
+                    raise ValueError("Parent inventory must have a quantity of 1")
+            elif len(parent_records) > 1:
+                print("Multiple parent inventories found:")
+                i = 1
+                for rec in parent_records:
+                    print(f"{i}) {rec['child']} in {rec['parent']}")
+                    i += 1
+                choice = input("Enter the number of the parent inventory to use: ")
+                parent_record = dict(parent_records[int(choice) - 1])
+                if parent_record["quantity"] == 1:
+                    self.inventory_id_parent = parent_record["inventory_id"]
+                    self.hierarchy_level = parent_record["hierarchy_level"] + 1
+                else:
+                    raise ValueError("Parent inventory must have a quantity of 1")
+            else:
+                raise ValueError(
+                    "Something went wrong with the parent inventory lookup"
+                )
 
     def __str__(self):
         if self._quantity_new > 0:

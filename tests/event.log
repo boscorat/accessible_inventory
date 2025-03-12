@@ -746,3 +746,12 @@ INFO:entity:Entity created successfully: World Wont Listen By Smith (total inven
 INFO:inventory:Inventory created successfully
 INFO:inventory:Inventory created successfully
 INFO:entity:Entity created successfully: Sofa (total inventory: 0) (14b0a5f2-db16-4718-a7ef-76ad28b47ed9)
+INFO:entity:Entity updated successfully: Plump Lovely Piglet (total inventory: 0) (1dd566b5-21ba-4f5c-ae90-c1841feab8b5)
+INFO:entity:Cannot delete as entity has inventory
+INFO:entity:Entity deleted successfully
+INFO:inventory:Inventory created successfully
+INFO:inventory:Inventory updated successfully
+INFO:inventory:Inventory updated successfully
+INFO:inventory:Inventory updated successfully
+INFO:inventory:Inventory deleted successfully
+INFO:entity:Entity created successfully: Stillwaters (total inventory: 0) (339cfbbb-f263-41f0-b4dc-5abcfe83e98c)

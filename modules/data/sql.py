@@ -2,8 +2,10 @@
 import sqlite3
 from pathlib import Path
 
-PATH = "/home/boscorat/repos/accessible_inventory/data/inventory.db"
-DATABASE = Path(PATH).absolute().resolve()
+from path import PATH_DB
+
+# PATH = "/home/boscorat/repos/accessible_inventory/data/inventory.db"
+DATABASE = Path(PATH_DB).absolute().resolve()
 # print(Path.home().absolute().resolve())
 # print(PosixPath.cwd().absolute().resolve())
 # print(f"{PosixPath.cwd()}/data/inventory.db")
@@ -102,6 +104,17 @@ def update_entity(
     connection.execute(
         "PRAGMA foreign_keys=ON"
     )  # enable foreign key constraints so that the delete operation cascades to the inventory table
+    connection.execute(sql)
+    connection.commit()
+    connection.close()
+
+
+def update_entity_base_hierarchy_level(
+    entity_id,
+    base_hierarchy_level,
+):
+    sql = f"UPDATE entity_sql SET base_hierarchy_level = '{base_hierarchy_level}' WHERE entity_id = '{entity_id}'"
+    connection = sqlite3.connect(DATABASE)
     connection.execute(sql)
     connection.commit()
     connection.close()
