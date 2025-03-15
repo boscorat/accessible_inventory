@@ -2,7 +2,7 @@ import logging
 import sqlite3
 from uuid import uuid4
 
-from data.duck import dd
+from data.duck import dd, sql_inventory
 from data.sql import (
     delete_inventory,
     insert_inventory,
@@ -124,8 +124,9 @@ class Inventory:
         else:
             parent_records = (
                 dd.execute(
-                    "select * from inventory_sql where entity_id_child = ?",
-                    [self.entity_parent.entity_id],
+                    sql_inventory(
+                        entity_id_child=self.entity_parent.entity_id,
+                    )
                 )
                 .df()
                 .to_dict("records")
@@ -139,9 +140,9 @@ class Inventory:
                 )
             elif len(parent_records) == 1:
                 parent_record = parent_records[0]
-                if parent_record["quantity"] == 1:
+                if parent_record["qty"] == 1:
                     self.inventory_id_parent = parent_record["inventory_id"]
-                    self.hierarchy_level = parent_record["hierarchy_level"] + 1
+                    self.hierarchy_level = parent_record["lvl"] + 1
                 else:
                     raise ValueError("Parent inventory must have a quantity of 1")
             elif len(parent_records) > 1:
@@ -152,9 +153,9 @@ class Inventory:
                     i += 1
                 choice = input("Enter the number of the parent inventory to use: ")
                 parent_record = dict(parent_records[int(choice) - 1])
-                if parent_record["quantity"] == 1:
+                if parent_record["qty"] == 1:
                     self.inventory_id_parent = parent_record["inventory_id"]
-                    self.hierarchy_level = parent_record["hierarchy_level"] + 1
+                    self.hierarchy_level = parent_record["lvl"] + 1
                 else:
                     raise ValueError("Parent inventory must have a quantity of 1")
             else:
@@ -174,9 +175,9 @@ class Inventory:
 
     @action.setter
     def action(self, value):
-        if value not in ["ADD", "REMOVE"]:
+        if value.upper() not in ["ADD", "REMOVE"]:
             raise ValueError("Action must be ADD or REMOVE")
-        self._action = value
+        self._action = value.upper()
 
     @property
     def position(self):
@@ -184,9 +185,9 @@ class Inventory:
 
     @position.setter
     def position(self, value):
-        if value not in ["IN", "ON", "UNDER", "BEHIND"]:
+        if value.upper() not in ["IN", "ON", "UNDER", "BEHIND"]:
             raise ValueError("Position must be IN, ON, UNDER, BEHIND")
-        self._position = value
+        self._position = value.upper()
 
     @property
     def quantity(self):
